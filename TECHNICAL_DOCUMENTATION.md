@@ -71,7 +71,7 @@ The summary metrics at the top of the dashboard provide a high-level overview of
 
 The dashboard provides a card for each monitored AWS region (e.g., `us-east-1`, `us-west-2`, `eu-west-1`), showing a detailed health breakdown.
 
-![Regional Metrics](https://i.imgur.com/VAzTcwI.png)
+https://imgur.com/xtjv393
 
 -   **Region Health**: The header of each card shows the number of healthy endpoints out of the total for that region (e.g., "7/7 Healthy").
 -   **Service Status**: Each card contains a set of smaller cards, one for each monitored AWS service (e.g., DynamoDB, RDS, EC2).
