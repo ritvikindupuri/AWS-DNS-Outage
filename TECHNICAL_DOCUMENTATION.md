@@ -91,6 +91,8 @@ This tiered approach to status determination allows the system to prioritize ale
 
 ### System Health Trends
 
+https://imgur.com/xtjv393
+
 The dashboard also features a "System Health Trends" graph, which provides a historical view of the system's health over time.
 
 This graph displays the number of endpoints in each of the 'healthy', 'warning', and 'critical' states over the last several monitoring intervals. This allows for easy identification of trends in the system's health, such as a gradual increase in the number of 'warning' or 'critical' endpoints, which could be an early indicator of a developing issue.
