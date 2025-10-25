@@ -26,23 +26,8 @@ This project provides a comprehensive system for preventing DNS-related outages 
 The system is designed for high availability and multi-region resilience. The following diagram illustrates the architecture:
 
 ```
-+-----------------+      +-----------------+      +-----------------+
-|   US-East-1     |      |   US-West-2     |      |   EU-West-1     |
-|   (Primary)     |      |  (Secondary)    |      |  (Secondary)    |
-+-----------------+      +-----------------+      +-----------------+
-| - ELB           |      | - ELB           |      | - ELB           |
-| - EC2 Instances |      | - EC2 Instances |      | - EC2 Instances |
-| - RDS           |      | - RDS           |      | - RDS           |
-| - ECS Services  |      | - ECS Services  |      | - ECS Services  |
-| - Lambda        |      | - Lambda        |      | - Lambda        |
-+-----------------+      +-----------------+      +-----------------+
-        |                      |                      |
-        +----------------------+----------------------+
-                               |
-                  +-------------------------------+
-                  |  Route 53 DNS & CloudFront CDN |
-                  |  Health Checks & Failover     |
-                  +-------------------------------+
+<img width="784" height="1371" alt="diagram-export-10-25-2025-6_00_39-PM" src="https://github.com/user-attachments/assets/77155a6e-7ce2-44a3-aee9-a7fd5b47fb52" />
+
 ```
 
 ## System Components
