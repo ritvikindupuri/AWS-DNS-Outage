@@ -93,6 +93,19 @@ The 'healthy', 'warning', and 'critical' statuses for each individual endpoint a
 
 This tiered approach to status determination allows the system to prioritize alerts and draw attention to issues with the most critical components of the infrastructure.
 
+### System Health Trends
+
+The dashboard also features a "System Health Trends" graph, which provides a historical view of the system's health over time.
+
+![System Health Trends](https://i.imgur.com/xtjv393.png)
+
+This graph displays the number of endpoints in each of the 'healthy', 'warning', and 'critical' states over the last several monitoring intervals. This allows for easy identification of trends in the system's health, such as a gradual increase in the number of 'warning' or 'critical' endpoints, which could be an early indicator of a developing issue.
+
+-   **Data Source**: The data for this graph is collected by the `perform_health_checks` function in the `web_dashboard.py` script. With each 10-second monitoring interval, the script records the number of endpoints in each state ('healthy', 'warning', 'critical') and stores this data in a historical log. The dashboard then displays the last 20 data points from this log, providing a rolling window of the system's recent health.
+-   **X-Axis**: The x-axis of the graph represents time, with each data point corresponding to a monitoring interval.
+-   **Y-Axis**: The y-axis represents the number of endpoints in each state.
+-   **Tooltip**: The tooltip that appears when hovering over a data point provides a snapshot of the system's health at that specific time. For example, the tooltip in the screenshot, "Warning: 4", indicates that at 7:19:47 PM, there were 4 endpoints in the 'warning' state.
+
 ## Machine Learning Model
 
 The system utilizes a machine learning model to proactively detect anomalies in DNS health check data, which could be early indicators of systemic issues or impending outages.
