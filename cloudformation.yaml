@@ -1,0 +1,236 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'AWS Resources for Crypto Security Application'
+
+Parameters:
+  Environment:
+    Description: Environment name
+    Type: String
+    Default: dev
+    AllowedValues:
+      - dev
+      - staging
+      - prod
+
+Resources:
+  # S3 Bucket for storing application data
+  CryptoSecurityBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub crypto-security-data-${Environment}
+      VersioningConfiguration:
+        Status: Enabled
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+
+  # IAM Role for EKS Cluster
+  EKSClusterRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: eks.amazonaws.com
+            Action: 'sts:AssumeRole'
+      ManagedPolicyArns:
+        - 'arn:aws:iam::aws:policy/AmazonEKSClusterPolicy'
+
+  # IAM Role for EKS Node Group
+  EKSNodeGroupRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: ec2.amazonaws.com
+            Action: 'sts:AssumeRole'
+      ManagedPolicyArns:
+        - 'arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy'
+        - 'arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy'
+        - 'arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly'
+
+  # VPC for EKS Cluster
+  VPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 10.0.0.0/16
+      EnableDnsSupport: true
+      EnableDnsHostnames: true
+      Tags:
+        - Key: Name
+          Value: !Sub ${Environment}-crypto-security-vpc
+
+  # Internet Gateway
+  InternetGateway:
+    Type: AWS::EC2::InternetGateway
+    Properties:
+      Tags:
+        - Key: Name
+          Value: !Sub ${Environment}-crypto-security-igw
+
+  # Attach Internet Gateway to VPC
+  VPCGatewayAttachment:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      VpcId: !Ref VPC
+      InternetGatewayId: !Ref InternetGateway
+
+  # Public Subnet 1
+  PublicSubnet1:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      AvailabilityZone: !Select [0, !GetAZs '']
+      CidrBlock: 10.0.1.0/24
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: !Sub ${Environment}-crypto-security-public-1
+
+  # Public Subnet 2
+  PublicSubnet2:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      AvailabilityZone: !Select [1, !GetAZs '']
+      CidrBlock: 10.0.2.0/24
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: !Sub ${Environment}-crypto-security-public-2
+
+  # Private Subnet 1
+  PrivateSubnet1:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      AvailabilityZone: !Select [0, !GetAZs '']
+      CidrBlock: 10.0.3.0/24
+      Tags:
+        - Key: Name
+          Value: !Sub ${Environment}-crypto-security-private-1
+
+  # Private Subnet 2
+  PrivateSubnet2:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      AvailabilityZone: !Select [1, !GetAZs '']
+      CidrBlock: 10.0.4.0/24
+      Tags:
+        - Key: Name
+          Value: !Sub ${Environment}-crypto-security-private-2
+
+  # EKS Cluster
+  EKSCluster:
+    Type: AWS::EKS::Cluster
+    Properties:
+      Name: !Sub ${Environment}-crypto-security-cluster
+      RoleArn: !GetAtt EKSClusterRole.Arn
+      Version: '1.27'
+      ResourcesVpcConfig:
+        SubnetIds:
+          - !Ref PublicSubnet1
+          - !Ref PublicSubnet2
+          - !Ref PrivateSubnet1
+          - !Ref PrivateSubnet2
+        SecurityGroupIds:
+          - !Ref EKSSecurityGroup
+        EndpointPublicAccess: true
+        EndpointPrivateAccess: true
+
+  # EKS Node Group
+  EKSNodeGroup:
+    Type: AWS::EKS::Nodegroup
+    DependsOn: EKSCluster
+    Properties:
+      ClusterName: !Ref EKSCluster
+      NodegroupName: !Sub ${Environment}-crypto-security-nodegroup
+      NodeRole: !GetAtt EKSNodeGroupRole.Arn
+      ScalingConfig:
+        MinSize: 2
+        DesiredSize: 3
+        MaxSize: 5
+      InstanceTypes:
+        - t3.medium
+      Subnets:
+        - !Ref PrivateSubnet1
+        - !Ref PrivateSubnet2
+
+  # Security Group for EKS
+  EKSSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Security group for EKS cluster
+      VpcId: !Ref VPC
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 443
+          ToPort: 443
+          CidrIp: 0.0.0.0/0
+
+  # GuardDuty for Security Monitoring
+  GuardDutyDetector:
+    Type: AWS::GuardDuty::Detector
+    Properties:
+      Enable: true
+      FindingPublishingFrequency: FIFTEEN_MINUTES
+
+  # CloudWatch Log Group for Application Logs
+  ApplicationLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub /aws/eks/${Environment}-crypto-security-cluster/application
+      RetentionInDays: 30
+
+  # CloudWatch Alarm for Suspicious Activity
+  SuspiciousActivityAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub ${Environment}-crypto-security-suspicious-activity
+      AlarmDescription: Alarm for suspicious activity in the crypto security application
+      MetricName: SuspiciousActivityCount
+      Namespace: CryptoSecurity/SecurityMetrics
+      Statistic: Sum
+      Period: 300
+      EvaluationPeriods: 1
+      Threshold: 1
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      AlarmActions:
+        - !Ref SecurityNotificationTopic
+
+  # SNS Topic for Security Notifications
+  SecurityNotificationTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      TopicName: !Sub ${Environment}-crypto-security-notifications
+      DisplayName: Crypto Security Notifications
+
+Outputs:
+  ClusterName:
+    Description: The name of the EKS cluster
+    Value: !Ref EKSCluster
+    Export:
+      Name: !Sub ${AWS::StackName}-ClusterName
+
+  S3BucketName:
+    Description: The name of the S3 bucket
+    Value: !Ref CryptoSecurityBucket
+    Export:
+      Name: !Sub ${AWS::StackName}-S3BucketName
+
+  GuardDutyDetectorId:
+    Description: The ID of the GuardDuty detector
+    Value: !Ref GuardDutyDetector
+    Export:
+      Name: !Sub ${AWS::StackName}-GuardDutyDetectorId
