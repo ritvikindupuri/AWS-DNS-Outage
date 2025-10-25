@@ -30,12 +30,7 @@ This project provides a comprehensive system for preventing DNS-related outages 
 
 The system is designed for high availability and multi-region resilience. The following diagram illustrates the architecture:
 
-<p align="center">
-  <img src="https://i.imgur.com/5r5PrfP.png" alt="Architecture Diagram" width="800">
-</p>
-<p align="center">
-  *Figure 1: High Level Architecture Diagram.*
-</p>
+![Architecture Diagram](https://i.imgur.com/5r5PrfP.png)
 
 ## System Components
 
