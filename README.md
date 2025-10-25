@@ -26,7 +26,7 @@ This project provides a comprehensive system for preventing DNS-related outages 
 The system is designed for high availability and multi-region resilience. The following diagram illustrates the architecture:
 
 ```
-<img src=".assets/Screenshot 2025-10-25 180609.png" width="800" alt="DNS Outage Diagram">
+<img src=".assets/dns-outage-diagram.png" width="800" alt="DNS Outage Diagram">
 <p align="center">*Figure Y: High Level Architecture Diagram.*</p>
 ```
 
