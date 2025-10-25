@@ -26,8 +26,8 @@ This project provides a comprehensive system for preventing DNS-related outages 
 The system is designed for high availability and multi-region resilience. The following diagram illustrates the architecture:
 
 ```
-<img src = ".assets/diagram-export-10-25-2025-6_00_39-PM.png" width="800" alt="AWS DNS Architecture">
-<p align="center">*Figure 1: High Level Architecture Diagram of the DNS Outage Prevention Applictaion*</p>
+<img src="./assets/diagram-export-10-25-2025-6_00_39-PM.png" width="800" alt="Multi-Region AWS Architecture Diagram">
+<p align="center">*Figure 1: Multi-Region AWS Deployment Architecture.*</p>
 
 ```
 
