@@ -91,7 +91,7 @@ This tiered approach to status determination allows the system to prioritize ale
 
 ### System Health Trends
 
-https://imgur.com/xtjv393
+![Dashboard Screenshot]https://imgur.com/xtjv393
 
 The dashboard also features a "System Health Trends" graph, which provides a historical view of the system's health over time.
 
