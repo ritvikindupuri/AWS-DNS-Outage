@@ -1,4 +1,7 @@
-# AWS Multi-Region Resilience and Outage Prevention System: Technical Documentation
+# AWS Multi-Region Resilience Monitor
+by: Ritvik Indupuri
+
+--
 
 ## Introduction
 
