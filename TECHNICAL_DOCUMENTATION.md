@@ -97,8 +97,6 @@ This tiered approach to status determination allows the system to prioritize ale
 
 The dashboard also features a "System Health Trends" graph, which provides a historical view of the system's health over time.
 
-![System Health Trends](https://i.imgur.com/xtjv393.png)
-
 This graph displays the number of endpoints in each of the 'healthy', 'warning', and 'critical' states over the last several monitoring intervals. This allows for easy identification of trends in the system's health, such as a gradual increase in the number of 'warning' or 'critical' endpoints, which could be an early indicator of a developing issue.
 
 -   **Data Source**: The data for this graph is collected by the `perform_health_checks` function in the `web_dashboard.py` script. With each 10-second monitoring interval, the script records the number of endpoints in each state ('healthy', 'warning', 'critical') and stores this data in a historical log. The dashboard then displays the last 20 data points from this log, providing a rolling window of the system's recent health.
