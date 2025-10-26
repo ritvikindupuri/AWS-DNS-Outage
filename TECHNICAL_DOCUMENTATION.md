@@ -33,6 +33,8 @@ This document provides a comprehensive technical overview of the AWS Multi-Regio
   *Figure 1: High-level architecture showing multi-region deployment and monitoring components.*
 </p>
 
+
+
 The system is composed of several key components that work together to provide a comprehensive solution for multi-region resilience and outage prevention. The architecture is designed to be modular and scalable, allowing for easy extension and customization.
 
 The core of the system is the **Outage Prevention System**, which is responsible for monitoring the health of the AWS environment, predicting potential outages, and triggering automated failover procedures. This system is composed of the following sub-components:
