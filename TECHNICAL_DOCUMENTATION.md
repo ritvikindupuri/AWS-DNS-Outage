@@ -80,7 +80,12 @@ The summary metrics at the top of the dashboard provide a high-level overview of
 
 The dashboard also features a "System Health Trends" graph, which provides a historical view of the system's health over time.
 
-![System Health Trends](https://i.imgur.com/xtjv393.png)
+<p align="center">
+  <img src="https://i.imgur.com/xtjv393.png" alt="Historical Health Status Graph" width="800">
+</p>
+<p align="center">
+  *Figure 3: Historical graph showing endpoint status (Healthy, Warning, Critical) over time.*
+</p>
 
 This graph displays the number of endpoints in each of the 'healthy', 'warning', and 'critical' states over the last several monitoring intervals. This allows for easy identification of trends in the system's health, such as a gradual increase in the number of 'warning' or 'critical' endpoints, which could be an early indicator of a developing issue.
 
