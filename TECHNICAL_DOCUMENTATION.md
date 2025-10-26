@@ -57,8 +57,6 @@ The web dashboard provides a real-time, at-a-glance view of the health of the mu
   *Figure 2: Real-time web dashboard displaying multi-region AWS service health.*
 </p>
 
---
-
 The dashboard is divided into two main sections:
 1.  **Summary Metrics**: A top-level overview of the entire system's health.
 2.  **Regional Metrics**: A detailed breakdown of the health of each AWS region being monitored.
