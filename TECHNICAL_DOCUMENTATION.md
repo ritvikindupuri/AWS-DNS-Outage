@@ -1,5 +1,7 @@
-# AWS DNS Health & Failover System: Technical Documentation 
+# AWS Multi-Region Resilience Monitor: Technical Documentation 
 By: Ritvik Indupuri
+
+
 
 ## Introduction
 
