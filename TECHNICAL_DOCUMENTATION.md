@@ -7,6 +7,12 @@ By: Ritvik Indupuri
 
 This document provides a comprehensive technical overview of the AWS Multi-Region Resilience and Outage Prevention System. The system is designed to provide proactive monitoring, predictive outage detection, and automated failover for multi-region AWS environments. This document is intended for engineers, architects, and developers who are responsible for maintaining and extending the system.
 
+### 1.1 Purpose
+This document provides a technical overview of the AWS Multi-Region Resilience Monitor. The system is designed for proactive monitoring of critical DNS endpoints in multi-region AWS environments, incorporating anomaly detection and automated failover capabilities to mitigate potential outages.
+
+### 1.2 Target Audience
+This documentation is intended for engineers, architects, and developers responsible for deploying, maintaining, or extending this monitoring and resilience system.
+
 ## Table of Contents
 
 - [Introduction](#introduction)
