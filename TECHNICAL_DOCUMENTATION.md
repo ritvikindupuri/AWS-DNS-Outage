@@ -77,7 +77,6 @@ This graph displays the number of endpoints in each of the 'healthy', 'warning',
 -   **Y-Axis**: The y-axis represents the number of endpoints in each state.
 -   **Tooltip**: The tooltip that appears when hovering over a data point provides a snapshot of the system's health at that specific time. For example, the tooltip in the screenshot, "Warning: 4", indicates that at 7:19:47 PM, there were 4 endpoints in the 'warning' state.
 
---
 
 #### Endpoint Details Table
 
