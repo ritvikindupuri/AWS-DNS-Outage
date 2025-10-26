@@ -104,7 +104,7 @@ The 'healthy', 'warning', and 'critical' statuses for each individual endpoint a
 This tiered approach to status determination allows the system to prioritize alerts and draw attention to issues with the most critical components of the infrastructure.
 
 
-### System Health Trends
+## System Health Trends
 
 The dashboard also features a "System Health Trends" graph, which provides a historical view of the system's health over time.
 
@@ -123,7 +123,7 @@ This graph displays the number of endpoints in each of the 'healthy', 'warning',
 -   **Tooltip**: The tooltip that appears when hovering over a data point provides a snapshot of the system's health at that specific time. For example, the tooltip in the screenshot, "Warning: 4", indicates that at 7:19:47 PM, there were 4 endpoints in the 'warning' state.
 
 
-#### Endpoint Details Table
+### Endpoint Details Table
 
 The main table on the dashboard provides a detailed, real-time status for every individual AWS service endpoint being monitored.
 
