@@ -26,7 +26,12 @@ This document provides a comprehensive technical overview of the AWS Multi-Regio
 
 ## System Architecture
 
-![System Architecture Diagram](https://i.imgur.com/5r5PrfP.png)
+<p align="center">
+  <img src="https://i.imgur.com/5r5PrfP.png" alt="System Architecture Diagram" width="800">
+</p>
+<p align="center">
+  *Figure 1: High-level architecture showing multi-region deployment and monitoring components.*
+</p>
 
 The system is composed of several key components that work together to provide a comprehensive solution for multi-region resilience and outage prevention. The architecture is designed to be modular and scalable, allowing for easy extension and customization.
 
