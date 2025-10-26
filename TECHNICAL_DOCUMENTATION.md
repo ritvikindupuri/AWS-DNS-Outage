@@ -43,7 +43,12 @@ The core of the system is the **Outage Prevention System**, which is responsible
 
 The web dashboard provides a real-time, at-a-glance view of the health of the multi-region AWS environment. It is designed to be intuitive and easy to understand, allowing for quick identification of potential issues.
 
-![Dashboard Screenshot](https://i.imgur.com/Sn0lDXO.png)
+<p align="center">
+  <img src="https://i.imgur.com/5r5PrfP.png" alt="System Architecture Diagram" width="800">
+</p>
+<p align="center">
+  *Figure 1: High-level architecture showing multi-region deployment and monitoring components.*
+</p>
 
 The dashboard is divided into two main sections:
 1.  **Summary Metrics**: A top-level overview of the entire system's health.
