@@ -51,7 +51,7 @@ The system is architected for high availability, fault tolerance, and scalabilit
 ### Deployment and Configuration
 
 - **`deployment_script.py`**: This script automates the end-to-end deployment of the system, including the provisioning of IAM roles, Lambda functions, EventBridge rules, and CloudWatch dashboards.
-- **`resilience_architecture.yaml`**: The AWS CloudFormation template that defines the core infrastructure, including the multi-region VPC setup, Application Load Balancer, ECS cluster, and the CloudWatch dashboard.
+- **`resilience_architecture.yaml`**: The AWS CloudFormation template that defines the core infrastructure. This file includes the definitions for the multi-region VPC setup, Application Load Balancer, ECS cluster, and the CloudWatch dashboards used to visualize the system's health.
 
 ## Getting Started
 

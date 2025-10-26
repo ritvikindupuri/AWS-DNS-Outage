@@ -1,17 +1,8 @@
-# AWS Multi-Region Resilience Monitor: Technical Documentation 
-By: Ritvik Indupuri
-
-
+# AWS Multi-Region Resilience and Outage Prevention System: Technical Documentation
 
 ## Introduction
 
 This document provides a comprehensive technical overview of the AWS Multi-Region Resilience and Outage Prevention System. The system is designed to provide proactive monitoring, predictive outage detection, and automated failover for multi-region AWS environments. This document is intended for engineers, architects, and developers who are responsible for maintaining and extending the system.
-
-### 1.1 Purpose
-This document provides a technical overview of the AWS Multi-Region Resilience Monitor. The system is designed for proactive monitoring of critical DNS endpoints in multi-region AWS environments, incorporating anomaly detection and automated failover capabilities to mitigate potential outages.
-
-### 1.2 Target Audience
-This documentation is intended for engineers, architects, and developers responsible for deploying, maintaining, or extending this monitoring and resilience system.
 
 ## Table of Contents
 
@@ -35,14 +26,7 @@ This documentation is intended for engineers, architects, and developers respons
 
 ## System Architecture
 
-<p align="center">
-  <img src="https://i.imgur.com/5r5PrfP.png" alt="System Architecture Diagram" width="800">
-</p>
-<p align="center">
-  *Figure 1: High-level architecture showing multi-region deployment and monitoring components.*
-</p>
-
-
+![System Architecture Diagram](https://i.imgur.com/5r5PrfP.png)
 
 The system is composed of several key components that work together to provide a comprehensive solution for multi-region resilience and outage prevention. The architecture is designed to be modular and scalable, allowing for easy extension and customization.
 
@@ -59,16 +43,24 @@ The core of the system is the **Outage Prevention System**, which is responsible
 
 The web dashboard provides a real-time, at-a-glance view of the health of the multi-region AWS environment. It is designed to be intuitive and easy to understand, allowing for quick identification of potential issues.
 
-<p align="center">
-  <img src="https://i.imgur.com/Sn0lDXO.png" alt="Web Dashboard showing AWS service health" width="800">
-</p>
-<p align="center">
-  *Figure 2: Real-time web dashboard displaying multi-region AWS service health.*
-</p>
+![Dashboard Screenshot](https://i.imgur.com/Sn0lDXO.png)
 
 The dashboard is divided into two main sections:
 1.  **Summary Metrics**: A top-level overview of the entire system's health.
 2.  **Regional Metrics**: A detailed breakdown of the health of each AWS region being monitored.
+
+### System Health Trends
+
+The dashboard also features a "System Health Trends" graph, which provides a historical view of the system's health over time.
+
+![System Health Trends](https://i.imgur.com/xtjv393.png)
+
+This graph displays the number of endpoints in each of the 'healthy', 'warning', and 'critical' states over the last several monitoring intervals. This allows for easy identification of trends in the system's health, such as a gradual increase in the number of 'warning' or 'critical' endpoints, which could be an early indicator of a developing issue.
+
+-   **Data Source**: The data for this graph is collected by the `perform_health_checks` function in the `web_dashboard.py` script. With each 10-second monitoring interval, the script records the number of endpoints in each state ('healthy', 'warning', 'critical') and stores this data in a historical log. The dashboard then displays the last 20 data points from this log, providing a rolling window of the system's recent health.
+-   **X-Axis**: The x-axis of the graph represents time, with each data point corresponding to a monitoring interval.
+-   **Y-Axis**: The y-axis represents the number of endpoints in each state.
+-   **Tooltip**: The tooltip that appears when hovering over a data point provides a snapshot of the system's health at that specific time. For example, the tooltip in the screenshot, "Warning: 4", indicates that at 7:19:47 PM, there were 4 endpoints in the 'warning' state.
 
 ### Data Sources and Metrics
 
@@ -85,9 +77,28 @@ The summary metrics at the top of the dashboard provide a high-level overview of
 -   **System Uptime**: This is a calculated metric representing the percentage of healthy endpoints, calculated as `(Healthy Endpoints / Total Endpoints) * 100`. The "Connected" indicator signifies an active WebSocket connection to the backend.
 -   **Avg Response Time**: The average response time in milliseconds across all monitored endpoints.
 
+#### Endpoint Details Table
+
+The main table on the dashboard provides a detailed, real-time status for every individual AWS service endpoint being monitored.
+
+![Endpoint Details](https://i.imgur.com/BFpNtVR.png)
+
+This table is the most granular view of the system's health and is designed to allow for quick identification of specific problem areas.
+
+-   **Status**: A color-coded indicator (green for 'healthy', orange for 'warning', red for 'critical') that provides an immediate visual cue of the endpoint's health.
+-   **Service**: The AWS service to which the endpoint belongs (e.g., DYNAMODB, RDS, EC2).
+-   **Region**: The AWS region where the endpoint is located (e.g., us-east-1).
+-   **Endpoint**: The full DNS hostname of the service endpoint.
+-   **Response Time**: The time taken, in milliseconds, to resolve the DNS for this specific endpoint.
+-   **IP Address**: The IP address that the endpoint's DNS resolved to.
+-   **Uptime**: A simulated uptime percentage based on the endpoint's current status. For a 'healthy' status, this is 99.9%; for 'warning', it is 95.5%; and for 'critical', it is 85.2%.
+-   **Last Check**: The time at which the last health check was performed for this endpoint.
+
 #### Regional Metrics
 
 The dashboard provides a card for each monitored AWS region (e.g., `us-east-1`, `us-west-2`, `eu-west-1`), showing a detailed health breakdown.
+
+![Regional Metrics](https://i.imgur.com/VAzTcwI.png)
 
 -   **Region Health**: The header of each card shows the number of healthy endpoints out of the total for that region (e.g., "7/7 Healthy").
 -   **Service Status**: Each card contains a set of smaller cards, one for each monitored AWS service (e.g., DynamoDB, RDS, EC2).
@@ -111,49 +122,6 @@ The 'healthy', 'warning', and 'critical' statuses for each individual endpoint a
         -   **Critical**: Response time > 100ms or a failed DNS lookup.
 
 This tiered approach to status determination allows the system to prioritize alerts and draw attention to issues with the most critical components of the infrastructure.
-
-
-## System Health Trends
-
-The dashboard also features a "System Health Trends" graph, which provides a historical view of the system's health over time.
-
-<p align="center">
-  <img src="https://i.imgur.com/xtjv393.png" alt="Historical Health Status Graph" width="800">
-</p>
-<p align="center">
-  *Figure 3: Historical graph showing endpoint status (Healthy, Warning, Critical) over time.*
-</p>
-
-This graph displays the number of endpoints in each of the 'healthy', 'warning', and 'critical' states over the last several monitoring intervals. This allows for easy identification of trends in the system's health, such as a gradual increase in the number of 'warning' or 'critical' endpoints, which could be an early indicator of a developing issue.
-
--   **Data Source**: The data for this graph is collected by the `perform_health_checks` function in the `web_dashboard.py` script. With each 10-second monitoring interval, the script records the number of endpoints in each state ('healthy', 'warning', 'critical') and stores this data in a historical log. The dashboard then displays the last 20 data points from this log, providing a rolling window of the system's recent health.
--   **X-Axis**: The x-axis of the graph represents time, with each data point corresponding to a monitoring interval.
--   **Y-Axis**: The y-axis represents the number of endpoints in each state.
--   **Tooltip**: The tooltip that appears when hovering over a data point provides a snapshot of the system's health at that specific time. For example, the tooltip in the screenshot, "Warning: 4", indicates that at 7:19:47 PM, there were 4 endpoints in the 'warning' state.
-
-
-## Endpoint Details Table
-
-The main table on the dashboard provides a detailed, real-time status for every individual AWS service endpoint being monitored.
-
-<p align="center">
-  <img src="https://i.imgur.com/BFpNtVR.png" alt="Endpoint Details Table" width="800">
-</p>
-<p align="center">
-  *Figure 4: Detailed table view showing the status, response time, and IP address for each monitored endpoint.*
-</p>
-
-This table is the most granular view of the system's health and is designed to allow for quick identification of specific problem areas.
-
--   **Status**: A color-coded indicator (green for 'healthy', orange for 'warning', red for 'critical') that provides an immediate visual cue of the endpoint's health.
--   **Service**: The AWS service to which the endpoint belongs (e.g., DYNAMODB, RDS, EC2).
--   **Region**: The AWS region where the endpoint is located (e.g., us-east-1).
--   **Endpoint**: The full DNS hostname of the service endpoint.
--   **Response Time**: The time taken, in milliseconds, to resolve the DNS for this specific endpoint.
--   **IP Address**: The IP address that the endpoint's DNS resolved to.
--   **Uptime**: A simulated uptime percentage based on the endpoint's current status. For a 'healthy' status, this is 99.9%; for 'warning', it is 95.5%; and for 'critical', it is 85.2%.
--   **Last Check**: The time at which the last health check was performed for this endpoint.
-
 
 ## Machine Learning Model
 
@@ -270,4 +238,4 @@ To test the system, you can run these scripts individually as described in the "
 
 ## Conclusion
 
-The AWS Multi-Region Resilience Monitor offers a practical framework for enhancing the availability of multi-region applications on AWS. By integrating continuous DNS health checks, machine learning-based anomaly detection, and automated failover logic, the system provides early detection of potential DNS-related issues that could lead to broader service disruptions. Its modular design facilitates customization and integration, making it a valuable component for improving the overall resilience and reliability of critical AWS infrastructure.
+The AWS Multi-Region Resilience and Outage Prevention System provides a robust and comprehensive solution for ensuring the high availability of critical, multi-region applications. By combining proactive DNS monitoring, machine learning-powered anomaly detection, and automated failover capabilities, the system is able to detect and respond to potential issues before they can escalate into service-impacting outages. The modular and extensible architecture allows for easy customization and integration with existing monitoring and alerting infrastructure, making it a valuable addition to any organization's resilience strategy.
