@@ -1,4 +1,5 @@
-# AWS Multi-Region Resilience and Outage Prevention System: Technical Documentation
+# AWS DNS Health & Failover System: Technical Documentation 
+By: Ritvik Indupuri
 
 ## Introduction
 
